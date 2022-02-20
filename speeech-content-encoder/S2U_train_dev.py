@@ -5,6 +5,7 @@ import torchaudio
 import pandas as pd
 from tqdm import tqdm
 import os 
+import torch
 
 SAMPLE_RATE = 16000
 CHUNK_LENGTH = 250000
@@ -51,41 +52,65 @@ def reader(fname):
 
 
 # train
-df = pd.read_csv('/home/daniel094144/data/lxt_sqa/script.csv')
-audio_file_dir = '/home/daniel094144/data/lxt_sqa/audio'
+df = pd.read_csv('/home/daniel094144/E2E-SpokenQA/meta-train.csv')
+audio_file_dir = '/home/daniel094144/E2E-SpokenQA/train_audios/'
 
-output_dir = '/home/daniel094144/data/SQA_code/w2v2_large_512/lxt_code'
-extractor = torch.hub.load('s3prl/s3prl', 'wav2vec2_large_ll60k')    
+output_dir = '/home/daniel094144/data/SQA_code/hubert_large_128/train_code'
+extractor = torch.hub.load('s3prl/s3prl', 'hubert_large_ll60k')    
 extractor.eval()
-
 if torch.cuda.is_available():
-        extractor = extractor.cuda()
+    extractor = extractor.cuda()
+apply_kmeans = ApplyKmeans('/home/daniel094144/Daniel/DUAL-textless-SQA/hubert-cluster-code/km_100h_c128/km_feat_layer_22')
 
-apply_kmeans = ApplyKmeans('/home/daniel094144/hubert-cluster-code/km_feat_100_layer_14_512')
 
-for file in tqdm(df['utterance_id'].values, desc='transforming lxt data to discrete code'):
-    audio_file = os.path.join(audio_file_dir, file+'.wav')
+for file in tqdm(df['id'].values, desc='transforming passage to discrete code'):
+    audio_file = os.path.join(audio_file_dir, file+'.mp3')
     wavs = reader(audio_file)
-    wavs = wavs.cuda()  
+
+    if len(wavs) > 20 * SAMPLE_RATE: 
+        continue
+    
+    wavs = wavs.cuda()    
+    feature = extractor([wavs])    
+
+    
+    code = apply_kmeans(feature['hidden_state_22'].squeeze().cuda())
+    code = torch.tensor(code)
+
+    merged_code, counts = torch.unique_consecutive(code, return_counts=True)
+    np.savetxt(os.path.join(output_dir, file+'.code'), merged_code.long(), fmt='%i')    
+    np.savetxt(os.path.join(output_dir, file+'.cnt'), counts.long(), fmt='%i')
+
+# dev
+df = pd.read_csv('/home/daniel094144/E2E-SpokenQA/meta-dev.csv')
+audio_file_dir = '/home/daniel094144/E2E-SpokenQA/dev_audios/'
+
+output_dir = '/home/daniel094144/data/SQA_code/hubert_large_128/dev_code'
+
+
+for file in tqdm(df['id'].values, desc='transforming passage to discrete code'):
+    audio_file = os.path.join(audio_file_dir, file+'.mp3')
+    wavs = reader(audio_file)
+    wavs = wavs.cuda()   
 
     if len(wavs) > 20 * SAMPLE_RATE: 
         print(f'{file} too long')
         chunks = torch.split(wavs, CHUNK_LENGTH) 
         for i, chunk in enumerate(chunks): 
             feat = extractor([chunk])
-            feat = feat['hidden_state_14'].squeeze()
+            feat = feat['hidden_state_22'].squeeze()
             
             if i == 0:
                 feature = feat
             else: 
                 feature = torch.cat([feature, feat], dim = 0)
 
-        code = apply_kmeans(feature.cuda()) 
+        code = apply_kmeans(feature.cuda())
+
     else:
         feature = extractor([wavs])    
 
-        
-        code = apply_kmeans(feature['hidden_state_14'].squeeze().cuda())
+        code = apply_kmeans(feature['hidden_state_22'].squeeze().cuda())
 
     code = torch.tensor(code)
 
