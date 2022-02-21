@@ -1,5 +1,5 @@
 # DUAL-textless-SQA
-*This repo is under-constructed*\\
+*This repo is under-constructed*
 * Installation 
 * Data Preparation 
     * Download our NMSQA dataset
@@ -31,7 +31,7 @@
                 Current the spoken passage is split to segments of utterances. For the standard QA task, you should merge the segments back to the whole passages. The suffix of `-1`, `-2`, ..., `-n` is the segment number of specific passage.
 
     * Speech Content Encoder
-    Please see details in `speeech-content-encoder`. \\
+    Please see details in `speeech-content-encoder`. 
     
     * Pre-process the QA labels 
     ```
