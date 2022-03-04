@@ -17,14 +17,14 @@ from torch.utils.data import DataLoader, Dataset
 
 class SQADataset(Dataset):
     def __init__(self, data_dir, mode='train', idx_offset=5):
-        df = pd.read_csv(os.path.join(data_dir, mode+'_code.csv'))
+        df = pd.read_csv(os.path.join(data_dir, mode+'_code_answer.csv'))
         with open(os.path.join(data_dir, mode+'-hash2question.json')) as f:
             h2q = json.load(f)      
             
         df['question'] = df['hash'].apply(lambda x: h2q[x])
         
-        code_dir = os.path.join(data_dir, mode+'_code')
-        code_passage_dir = os.path.join(data_dir, mode+'_code')
+        code_dir = os.path.join(data_dir, mode+'-hubert-128-22')
+        code_passage_dir = os.path.join(data_dir, mode+'-hubert-128-22')
         context_id = df['context_id'].values
         question = df['question'].values
         code_start = df['code_start'].values

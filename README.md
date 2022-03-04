@@ -3,7 +3,9 @@
 * Installation 
 * Data Preparation 
     * Download our NMSQA dataset
-        * [[link]](https://ntucc365-my.sharepoint.com/:u:/g/personal/r10942104_ntu_edu_tw/EZpxoRWns-NHoJnvaJERmDAB8WjHUf39obN4vQwQYHz73g?e=gU2GJi)
+        * [[dataset link]](https://ntucc365-my.sharepoint.com/:u:/g/personal/r10942104_ntu_edu_tw/EZpxoRWns-NHoJnvaJERmDAB8WjHUf39obN4vQwQYHz73g?e=gU2GJi)
+        * [[pretrained model on HuBERT-128]](https://ntucc365-my.sharepoint.com/:f:/g/personal/r10942104_ntu_edu_tw/EmDnNEHsnHlBiHNDnDzTGewB38uxBiimfrsY0EPgacP9oQ?e=OPp7hP)
+
         * Dataset Usage
             * Directory format
                 - train
@@ -32,11 +34,12 @@
 
     * Speech Content Encoder
     Please see details in `speeech-content-encoder`. 
-    
     * Pre-process the QA labels 
     ```
     python code_answer.py
     ```
+    
+    [NOTE] Preprocessed data link (including passage merging and unit-level labels): [[link]](https://ntucc365-my.sharepoint.com/:f:/g/personal/r10942104_ntu_edu_tw/EqXPTZAQJcNGgWP0gLW0FngBmpWSPWEHZ0h-ukEbIleh3g?e=Qv4Bas)
 * Training 
     ```
     python train.py --exp_name [exp name] --config baseline.yaml
