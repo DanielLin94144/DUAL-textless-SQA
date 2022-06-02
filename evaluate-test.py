@@ -31,7 +31,11 @@ model.eval()
 '''
 post-processing the answer prediction
 '''
-def _get_best_indexes(probs, n_best_size):
+def _get_best_indexes(probs, context_offset, n_best_size):
+    # use torch for faster inference
+    # do not need to consider indexes for question
+    best_indexes = torch.topk(probs[context_offset:],n_best_size).indices + context_offset
+    return best_indexes
     """Get the n-best logits from a list."""
     index_and_score = sorted(enumerate(probs), key=lambda x: x[1], reverse=True)
     best_indexes = []
@@ -42,27 +46,27 @@ def _get_best_indexes(probs, n_best_size):
     return best_indexes
     
 
-def post_process_prediction(start_prob, end_prob, input_id, n_best_size=10, max_answer_length=500, weight=0.6):
+def post_process_prediction(start_prob, end_prob,context_offset, n_best_size=10, max_answer_length=500, weight=0.6):
     prelim_predictions = []
     start_prob = start_prob.squeeze()
     end_prob = end_prob.squeeze()
     input_id = input_id.squeeze()
     
-    start_indexes = _get_best_indexes(start_prob, n_best_size)
-    end_indexes = _get_best_indexes(end_prob, n_best_size)
+    start_indexes = _get_best_indexes(start_prob,context_offset, n_best_size)
+    end_indexes = _get_best_indexes(end_prob,context_offset, n_best_size)
     # if we could have irrelevant answers, get the min score of irrelevant
 
     for start_index in start_indexes:
         for end_index in end_indexes:
             # We could hypothetically create invalid predictions, e.g., predict
             # that the start of the span is in the question. We throw out all
-            # invalid predictions.
-            if start_index >= len(input_id):
-                continue
-            if end_index >= len(input_id):
-                continue
-            if end_index < start_index:
-                continue
+            # invalid predictions. This is taken care in _get_best_indexes
+            # if start_index >= len(input_id):
+            #     continue
+            # if end_index >= len(input_id):
+            #     continue
+            # if end_index < start_index:
+            #     continue
             length = end_index - start_index + 1
             if length > max_answer_length:
                 continue
@@ -86,6 +90,7 @@ def post_process_prediction(start_prob, end_prob, input_id, n_best_size=10, max_
         final_start_idx = torch.argmax(start_prob).cpu()
         final_end_idx = torch.argmax(end_prob).cpu()
     return final_start_idx, final_end_idx
+
 
         
 class SQAlxtDataset(Dataset):
@@ -228,12 +233,12 @@ with torch.no_grad():
         final_starts, final_ends = [], [] 
         if batch_size == 1: 
             final_starts, final_ends = post_process_prediction(start_logprob, end_logprob, 
-                                                         batch['input_ids'], 3, 275)
+                                                         batch['context_begin'], 3, 275)
         
         else: 
             for j in range(start_logprob.shape[0]):
                 final_start, final_end = post_process_prediction(start_logprob[j], end_logprob[j], 
-                                                             batch['input_ids'][j], 3, 275)
+                                                             batch['context_begin'][j], 3, 275)
                 final_starts.append(final_start)
                 final_ends.append(final_end)
 
