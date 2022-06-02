@@ -65,8 +65,8 @@ def post_process_prediction(start_prob, end_prob,context_offset, n_best_size=10,
             #     continue
             # if end_index >= len(input_id):
             #     continue
-            # if end_index < start_index:
-            #     continue
+            if end_index < start_index:
+                continue
             length = end_index - start_index + 1
             if length > max_answer_length:
                 continue
