@@ -1,5 +1,6 @@
 # DUAL-textless-SQA
-*This repo is under-construction, please stay tuned for the update*
+## News
+* The NMSQA dataset is released under MIT License, feel free to use the dataset 🤗
 
 ![](https://i.imgur.com/TCtkkp3.png)
 
@@ -7,18 +8,15 @@ This repository is the official implementation for [DUAL: Discrete Spoken Unit A
 
 ## Installation 
 ### Model
-* [[Pretrained DUAL model on HuBERT-128]](https://ntucc365-my.sharepoint.com/:f:/g/personal/r10942104_ntu_edu_tw/EmDnNEHsnHlBiHNDnDzTGewB38uxBiimfrsY0EPgacP9oQ?e=OPp7hP)
+* [[Pretrained DUAL model on HuBERT-128]](https://ntucc365-my.sharepoint.com/:f:/g/personal/r10942104_ntu_edu_tw/?e=OPp7hP)
 ### Dataset
-Download our NMSQA dataset
+Download the NMSQA dataset
 * [[Original dataset]](https://ntucc365-my.sharepoint.com/:u:/g/personal/r10942104_ntu_edu_tw/EZpxoRWns-NHoJnvaJERmDAB8WjHUf39obN4vQwQYHz73g?e=gU2GJi)
 * [[Parquet Format dataset]](https://github.com/DanielLin94144/DUAL-textless-SQA/tree/main/data.parquet)
 * [[Huggingface Format dataset]](https://huggingface.co/datasets/voidful/NMSQA)
 
-
 ### Data Preparation for Original Dataset 
 Preprocessed data link (including passage merging and unit-level labels, updated with question code): [[link]](https://ntucc365-my.sharepoint.com/:f:/g/personal/r10942104_ntu_edu_tw/EqXPTZAQJcNGgWP0gLW0FngBmpWSPWEHZ0h-ukEbIleh3g?e=Qv4Bas)
-
-
 
 * Directory format
     - train
@@ -102,11 +100,13 @@ Eric Lam (Email: voidful.stack@gmail.com)
 
 # Citation
 ```
-@article{lin2022dual,
-    title={DUAL: Textless Spoken Question Answering with Speech Discrete Unit Adaptive Learning},
-    author={Lin, Guan-Ting and Chuang, Yung-Sung and Chung, Ho-Lam and Yang, Shu-wen and Chen, Hsuan-Jui and Li, Shang-Wen and Mohamed, Abdelrahman and Lee, Hung-yi and Lee, Lin-shan},
-    journal={arXiv preprint arXiv:2203.04911},
-    year={2022}
+@inproceedings{lin22c_interspeech,
+  author={Guan-Ting Lin and Yung-Sung Chuang and Ho-Lam Chung and Shu-wen Yang and Hsuan-Jui Chen and Shuyan Annie Dong and Shang-Wen Li and Abdelrahman Mohamed and Hung-yi Lee and Lin-shan Lee},
+  title={{DUAL: Discrete Spoken Unit Adaptive Learning for Textless Spoken Question Answering}},
+  year=2022,
+  booktitle={Proc. Interspeech 2022},
+  pages={5165--5169},
+  doi={10.21437/Interspeech.2022-612}
 }
 ```
 
