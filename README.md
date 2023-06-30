@@ -1,9 +1,5 @@
 # DUAL-textless-SQA
-## News
-* The NMSQA dataset is released under MIT License, feel free to use the dataset 🤗
-
 ![](https://i.imgur.com/TCtkkp3.png)
-
 This repository is the official implementation for [DUAL: Discrete Spoken Unit Adaptive Learning for Textless Spoken Question Answering](https://arxiv.org/abs/2203.04911) paper, and the release of the Natural Multi-speakers Spoken Question Answering **(NMSQA)** dataset. 
 
 ## Installation 
