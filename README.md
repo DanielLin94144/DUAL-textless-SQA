@@ -4,7 +4,7 @@ This repository is the official implementation for [DUAL: Discrete Spoken Unit A
 
 ## Installation 
 ### Model
-* [[Pretrained DUAL model on HuBERT-128]](https://ntucc365-my.sharepoint.com/:f:/g/personal/r10942104_ntu_edu_tw/?e=OPp7hP)
+* [[Pretrained DUAL model on HuBERT-128]](https://drive.google.com/file/d/1BjbjM007q8zt1Z8cjGKCZps3E7beeSj2/view?usp=sharing)
 ### Dataset
 Download the NMSQA dataset
 * [[Original dataset]](https://ntucc365-my.sharepoint.com/:u:/g/personal/r10942104_ntu_edu_tw/EZpxoRWns-NHoJnvaJERmDAB8WjHUf39obN4vQwQYHz73g?e=gU2GJi)
